@@ -1,5 +1,6 @@
 import './styles/border-toolbar.pcss';
 import svgPlusButton from './img/plus.svg';
+import svgCrossButton from './img/cross.svg';
 import {create} from './documentUtils';
 
 const CSS = {
@@ -10,9 +11,12 @@ const CSS = {
   verticalToolBar: 'tc-toolbar--ver',
   verticalHighlightingLine: 'tc-toolbar__shine-line--ver',
   plusButton: 'tc-toolbar__plus',
+  toolsButton: 'tc-toolbar__tools',
   horizontalPlusButton: 'tc-toolbar__plus--hor',
   verticalPlusButton: 'tc-toolbar__plus--ver',
-  area: 'tc-table__area',
+  horizontalToolsButton: 'tc-toolbar__tools--hor',
+  verticalToolsButton: 'tc-toolbar__tools--ver',
+  area: 'tc-table__area'
 };
 
 /**
@@ -24,8 +28,9 @@ class BorderToolBar {
    */
   constructor() {
     this._plusButton = this._generatePlusButton();
+    this._toolsButton = this._generateToolsButton();
     this._highlightingLine = this._generateHighlightingLine();
-    this._toolbar = this._generateToolBar([this._plusButton, this._highlightingLine]);
+    this._toolbar = this._generateToolBar([this._plusButton, this._toolsButton, this._highlightingLine]);
   }
 
   /**
@@ -63,12 +68,29 @@ class BorderToolBar {
    * @return {HTMLElement}
    */
   _generatePlusButton() {
-    const button = create('div', [CSS.plusButton]);
+    const button = create('div', [ CSS.plusButton ]);
 
     button.innerHTML = svgPlusButton;
     button.addEventListener('click', (event) => {
       event.stopPropagation();
       const e = new CustomEvent('click', {'detail': {'x': event.pageX, 'y': event.pageY}, 'bubbles': true});
+
+      this._toolbar.dispatchEvent(e);
+    });
+    return button;
+  }
+
+  /**
+   * Generates a tool button to edit rows and columns.
+   * @return {HTMLElement}
+   */
+  _generateToolsButton() {
+    const button = create('div', [ CSS.toolsButton ]);
+
+    button.innerHTML = svgCrossButton;
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const e = new CustomEvent('click', {'detail': {'type': 'remove', 'x': event.pageX, 'y': event.pageY}, 'bubbles': true});
 
       this._toolbar.dispatchEvent(e);
     });
@@ -138,6 +160,7 @@ export class HorizontalBorderToolBar extends BorderToolBar {
 
     this._toolbar.classList.add(CSS.horizontalToolBar);
     this._plusButton.classList.add(CSS.horizontalPlusButton);
+    this._toolsButton.classList.add(CSS.horizontalToolsButton);
     this._highlightingLine.classList.add(CSS.horizontalHighlightingLine);
   }
 
@@ -165,6 +188,7 @@ export class VerticalBorderToolBar extends BorderToolBar {
 
     this._toolbar.classList.add(CSS.verticalToolBar);
     this._plusButton.classList.add(CSS.verticalPlusButton);
+    this._toolsButton.classList.add(CSS.verticalToolsButton);
     this._highlightingLine.classList.add(CSS.verticalHighlightingLine);
   }
 

@@ -184,6 +184,7 @@ export class TableConstructor {
 
     if (this._hoveredCell === null) {
       const paddingContainer = 11;
+
       this._hoveredCell = this._container;
       areaCoords.x1 += paddingContainer;
       areaCoords.y1 += paddingContainer;
@@ -259,11 +260,21 @@ export class TableConstructor {
     }
     let typeCoord;
 
+    const type = event.detail && event.detail.type ? event.detail.type : ''
+
     if (this._activatedToolBar === this._horizontalToolBar) {
-      this._addRow();
+      if (type === 'remove') {
+        this._removeRow();
+      } else {
+        this._addRow();
+      }
       typeCoord = 'y';
     } else {
-      this._addColumn();
+      if (type === 'remove') {
+        this._removeColumn();
+      } else {
+        this._addColumn();
+      }
       typeCoord = 'x';
     }
     /** If event has transmitted data (coords of mouse) */
@@ -321,7 +332,7 @@ export class TableConstructor {
    */
   _getHoveredSideOfContainer() {
     if (this._hoveredCell === this._container) {
-      return this._isBottomOrRight() ? 0 : -1;
+      return this._isBottomOrRight() ? -1 : 0;
     }
     return 1;
   }
@@ -354,6 +365,23 @@ export class TableConstructor {
   }
 
   /**
+   * Removes row in table
+   * @private
+   */
+  _removeRow() {
+    const indicativeRow = this._hoveredCell.closest('TR');
+    let index = this._getHoveredSideOfContainer();
+
+    if (index === 1) {
+      index = indicativeRow.sectionRowIndex;
+      // if inserting after hovered cell
+      index = index + this._isBottomOrRight();
+    }
+
+    this._table.removeRow(index);
+  }
+
+  /**
    * @private
    *
    * Adds column in table
@@ -368,6 +396,23 @@ export class TableConstructor {
     }
 
     this._table.addColumn(index);
+  }
+
+  /**
+   * @private
+   *
+   * Removes column in table
+   */
+  _removeColumn() {
+    let index = this._getHoveredSideOfContainer();
+
+    if (index === 1) {
+      index = this._hoveredCell.cellIndex;
+      // if inserting after hovered cell
+      index = index + this._isBottomOrRight();
+    }
+
+    this._table.removeColumn(index);
   }
 
   /**

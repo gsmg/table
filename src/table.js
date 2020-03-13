@@ -42,6 +42,27 @@ export class Table {
   };
 
   /**
+   * Remove column in table on index place
+   * @param {number} index - number in the array of columns, where new column to insert,-1 if insert at the end
+   */
+  removeColumn(index = -1) {
+    this._numberOfColumns--;
+    /** Remove cell in each row */
+    const rows = this._table.rows;
+
+    if (rows[0].children.length === 1 ||
+      index >= rows[0].children.length ||
+      index < 0
+    ) {
+      return;
+    }
+
+    for (let i = 0; i < rows.length; i++) {
+      rows[i].deleteCell(index);
+    }
+  };
+
+  /**
    * Add row in table on index place
    * @param {number} index - number in the array of columns, where new column to insert,-1 if insert at the end
    * @return {HTMLElement} row
@@ -52,6 +73,24 @@ export class Table {
 
     this._fillRow(row);
     return row;
+  };
+
+  /**
+   * Remove row in table on index place
+   * @param {number} index - number in the array of columns, where new column to insert,-1 if insert at the end
+   * @return {HTMLElement} row
+   */
+  removeRow(index = -1) {
+    if (
+      index >= this._numberOfRows ||
+      this._numberOfRows === 1 ||
+      index < 0
+    ) {
+      return;
+    }
+
+    this._numberOfRows--;
+    this._table.deleteRow(index);
   };
 
   /**

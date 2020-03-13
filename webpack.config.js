@@ -4,10 +4,16 @@ module.exports = {
   entry: './src/plugin.js',
   output: {
     filename: 'bundle.js',
-    path: __dirname + '/dist/',
+    path: path.join(__dirname, 'dist'),
     library: 'Table',
     libraryTarget: 'umd'
   },
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 3000
+  },
+  devtool: 'inline-source-map',
   module: {
     rules: [
       {

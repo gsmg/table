@@ -7,7 +7,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development --watch",
-    "lint": "./node_modules/.bin/eslint"
+    "lint": "./node_modules/.bin/eslint",
+    "dev": "webpack-dev-server"
   },
   "repository": "https://github.com/editor-js/table",
   "author": {
@@ -34,5 +35,8 @@
     "svg-inline-loader": "^0.8.0",
     "webpack": "^4.29.5",
     "webpack-cli": "^3.2.3"
+  },
+  "dependencies": {
+    "webpack-dev-server": "^3.10.3"
   }
 }
