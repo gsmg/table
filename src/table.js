@@ -1,12 +1,12 @@
-import {create, getCoords, getSideByCoords} from './documentUtils';
-import './styles/table.pcss';
+import { create, getCoords, getSideByCoords } from "./documentUtils";
+import "./styles/table.pcss";
 
 const CSS = {
-  table: 'tc-table',
-  inputField: 'tc-table__inp',
-  cell: 'tc-table__cell',
-  wrapper: 'tc-table__wrap',
-  area: 'tc-table__area',
+  table: "tc-table",
+  inputField: "tc-table__inp",
+  cell: "tc-table__cell",
+  wrapper: "tc-table__wrap",
+  area: "tc-table__area",
 };
 
 /**
@@ -20,7 +20,7 @@ export class Table {
     this._numberOfColumns = 0;
     this._numberOfRows = 0;
     this._element = this._createTableWrapper();
-    this._table = this._element.querySelector('table');
+    this._table = this._element.querySelector("table");
 
     this._hangEvents();
   }
@@ -39,7 +39,7 @@ export class Table {
 
       this._fillCell(cell);
     }
-  };
+  }
 
   /**
    * Remove column in table on index place
@@ -50,7 +50,8 @@ export class Table {
     /** Remove cell in each row */
     const rows = this._table.rows;
 
-    if (rows[0].children.length === 1 ||
+    if (
+      rows[0].children.length === 1 ||
       index >= rows[0].children.length ||
       index < 0
     ) {
@@ -60,7 +61,7 @@ export class Table {
     for (let i = 0; i < rows.length; i++) {
       rows[i].deleteCell(index);
     }
-  };
+  }
 
   /**
    * Add row in table on index place
@@ -73,7 +74,7 @@ export class Table {
 
     this._fillRow(row);
     return row;
-  };
+  }
 
   /**
    * Remove row in table on index place
@@ -81,17 +82,13 @@ export class Table {
    * @return {HTMLElement} row
    */
   removeRow(index = -1) {
-    if (
-      index >= this._numberOfRows ||
-      this._numberOfRows === 1 ||
-      index < 0
-    ) {
+    if (index >= this._numberOfRows || this._numberOfRows === 1 || index < 0) {
       return;
     }
 
     this._numberOfRows--;
     this._table.deleteRow(index);
-  };
+  }
 
   /**
    * get html element of table
@@ -124,7 +121,7 @@ export class Table {
    * @return {HTMLElement} tbody - where rows will be
    */
   _createTableWrapper() {
-    return create('div', [CSS.wrapper], null, [create('table', [CSS.table])]);
+    return create("div", [CSS.wrapper], null, [create("table", [CSS.table])]);
   }
 
   /**
@@ -134,7 +131,7 @@ export class Table {
    * @return {HTMLElement} - the area
    */
   _createContenteditableArea() {
-    return create('div', [CSS.inputField], {contenteditable: 'true'});
+    return create("div", [CSS.inputField], { contenteditable: "true" });
   }
 
   /**
@@ -147,7 +144,7 @@ export class Table {
     cell.classList.add(CSS.cell);
     const content = this._createContenteditableArea();
 
-    cell.appendChild(create('div', [CSS.area], null, [content]));
+    cell.appendChild(create("div", [CSS.area], null, [content]));
   }
 
   /**
@@ -170,26 +167,38 @@ export class Table {
    * hang necessary events
    */
   _hangEvents() {
-    this._table.addEventListener('focus', (event) => {
-      this._focusEditField(event);
-    }, true);
+    this._table.addEventListener(
+      "focus",
+      (event) => {
+        this._focusEditField(event);
+      },
+      true
+    );
 
-    this._table.addEventListener('blur', (event) => {
-      this._blurEditField(event);
-    }, true);
+    this._table.addEventListener(
+      "blur",
+      (event) => {
+        this._blurEditField(event);
+      },
+      true
+    );
 
-    this._table.addEventListener('keydown', (event) => {
+    this._table.addEventListener("keydown", (event) => {
       this._pressedEnterInEditField(event);
     });
 
-    this._table.addEventListener('click', (event) => {
+    this._table.addEventListener("click", (event) => {
       this._clickedOnCell(event);
     });
 
-    this._table.addEventListener('mouseover', (event) => {
-      this._mouseEnterInDetectArea(event);
-      event.stopPropagation();
-    }, true);
+    this._table.addEventListener(
+      "mouseover",
+      (event) => {
+        this._mouseEnterInDetectArea(event);
+        event.stopPropagation();
+      },
+      true
+    );
   }
 
   /**
@@ -202,7 +211,7 @@ export class Table {
     if (!event.target.classList.contains(CSS.inputField)) {
       return;
     }
-    this._selectedCell = event.target.closest('.' + CSS.cell);
+    this._selectedCell = event.target.closest("." + CSS.cell);
   }
 
   /**
@@ -243,7 +252,7 @@ export class Table {
     if (!event.target.classList.contains(CSS.cell)) {
       return;
     }
-    const content = event.target.querySelector('.' + CSS.inputField);
+    const content = event.target.querySelector("." + CSS.inputField);
     content.focus();
   }
 
@@ -258,14 +267,16 @@ export class Table {
       return;
     }
 
-    const coordsCell = getCoords(event.target.closest('TD'));
+    const coordsCell = getCoords(event.target.closest("TD"));
     const side = getSideByCoords(coordsCell, event.pageX, event.pageY);
 
-    event.target.dispatchEvent(new CustomEvent('mouseInActivatingArea', {
-      'detail': {
-        'side': side
-      },
-      'bubbles': true
-    }));
+    event.target.dispatchEvent(
+      new CustomEvent("mouseInActivatingArea", {
+        detail: {
+          side: side,
+        },
+        bubbles: true,
+      })
+    );
   }
 }
