@@ -83,7 +83,7 @@ export class TableConstructor {
             "." + CSS.inputField
           );
 
-          input.innerHTML = data.content[i][j];
+          input.innerHTML = decodeURI(data.content[i][j]);
         }
       }
     }
@@ -171,9 +171,9 @@ export class TableConstructor {
       this._hideToolBar();
     });
 
-    this._container.addEventListener("keydown", (event) => {
-      this._containerKeydown(event);
-    });
+    // this._container.addEventListener("keydown", (event) => {
+    //   this._containerKeydown(event);
+    // });
 
     this._container.addEventListener("mouseout", (event) => {
       this._leaveDetectArea(event);

@@ -183,9 +183,9 @@ export class Table {
       true
     );
 
-    this._table.addEventListener("keydown", (event) => {
-      this._pressedEnterInEditField(event);
-    });
+    // this._table.addEventListener("keydown", (event) => {
+    //   this._pressedEnterInEditField(event);
+    // });
 
     this._table.addEventListener("click", (event) => {
       this._clickedOnCell(event);
