@@ -52,6 +52,9 @@ class Table {
    * @public
    */
   render() {
+    window.dispatchEvent(new CustomEvent('editorJsTableCreated', {
+      detail: this._tableConstructor.htmlElement
+    }));
     return this._tableConstructor.htmlElement;
   }
 
